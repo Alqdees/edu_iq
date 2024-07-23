@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "206016873227",
+    "project_id": "educationapp-3a344",
+    "storage_bucket": "educationapp-3a344.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206016873227:android:0f5624e9de382f0c43d80e",
+        "android_client_info": {
+          "package_name": "com.eduoferaq.edu.net.eduiraq"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKqJXG6gzQoRni1Pnr88uX2SWSBbhqCCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
