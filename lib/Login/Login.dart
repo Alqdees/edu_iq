@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, file_names
+import 'dart:developer';
+
 import 'package:edu_iraq/Navigation%20Bar/Navigation_Bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -20,18 +23,21 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   late Animation<double> _iconTranslationAnimation;
   late AnimationController _rotationController;
   late Animation<double> _rotationAnimation;
+  // late bool isrecord;
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
-
+    // isrecord =  ScreenProtector.isRecording();
+     ScreenProtector.preventScreenshotOn();
     _iconTranslationController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
     );
 
     _iconTranslationAnimation = Tween<double>(begin: 50, end: 0).animate(
-      CurvedAnimation(parent: _iconTranslationController, curve: Curves.easeInOut),
+      CurvedAnimation(
+          parent: _iconTranslationController, curve: Curves.easeInOut),
     );
 
     _iconTranslationController.forward();
@@ -50,7 +56,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   }
 
   @override
-  void dispose() {
+  void dispose()  {
+     ScreenProtector.preventScreenshotOff();
     _emailController.dispose();
     _passwordController.dispose();
     _iconTranslationController.dispose();
@@ -59,7 +66,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   }
 
   void _handleTextChange() {
-    if (_emailController.text.isNotEmpty || _passwordController.text.isNotEmpty) {
+    if (_emailController.text.isNotEmpty ||
+        _passwordController.text.isNotEmpty) {
       _rotationController.forward();
     } else {
       _rotationController.reverse();
@@ -73,15 +81,18 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     });
 
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
       User? user = userCredential.user;
 
       if (user != null) {
-        String userImageUrl = user.photoURL ?? ''; // Assuming photoURL is used for user image URL
-        String username = user.displayName ?? ''; // Assuming displayName is used for user name
+        String userImageUrl =
+            user.photoURL ?? ''; // Assuming photoURL is used for user image URL
+        String username = user.displayName ??
+            ''; // Assuming displayName is used for user name
         String userId = user.uid;
         String email = user.email ?? ''; // Get user email
 
@@ -135,7 +146,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   }
 
   Widget _buildTextField(String labelText, IconData icon, bool obscureText,
-      TextEditingController controller, {bool isPassword = false}) {
+      TextEditingController controller,
+      {bool isPassword = false}) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
@@ -163,7 +175,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
           borderSide: BorderSide(color: Colors.yellow),
           borderRadius: BorderRadius.all(Radius.circular(30.0)),
         ),
-        focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.yellow),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.yellow),
           borderRadius: BorderRadius.all(Radius.circular(30.0)),
         ),
       ),
@@ -178,12 +191,15 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
           const SizedBox(height: 15),
           _buildTextField('إيميل', Icons.email, false, _emailController),
           const SizedBox(height: 15),
-          _buildTextField('كلمة السر', Icons.lock, _obscurePassword, _passwordController, isPassword: true),
+          _buildTextField(
+              'كلمة السر', Icons.lock, _obscurePassword, _passwordController,
+              isPassword: true,),
           const SizedBox(height: 15),
           ElevatedButton(
             onPressed: isLoading ? null : _handleLogin,
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.black, backgroundColor: Colors.yellow, 
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.yellow,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
@@ -195,7 +211,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
           const SizedBox(height: 14),
           if (isLoginFailed)
             const Text('فشل تسجيل الدخول، حاول مرة أخرى.',
-                style: TextStyle(color: Colors.red)),
+                style: TextStyle(color: Colors.white)),
           const SizedBox(height: 0),
           TextButton(
             onPressed: isLoading
@@ -250,6 +266,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // log('message is recorde video $isrecord');
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
@@ -267,7 +284,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                 ),
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  heightFactor: 0.6, 
+                  heightFactor: 0.6,
                   child: AnimatedBuilder(
                     animation: _iconTranslationAnimation,
                     builder: (context, child) {
@@ -284,7 +301,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                           child: Container(
                             color: Colors.transparent,
                             height: 200,
-                            child: const Icon(Icons.person, size: 130, color: Colors.black),
+                            child: const Icon(Icons.person,
+                                size: 130, color: Colors.black),
                           ),
                         ),
                       );
@@ -298,7 +316,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               children: [
                 Expanded(child: Divider(color: Colors.yellow)),
                 SizedBox(width: 8),
-                Text('قم بإدخال حسابك من فضلك', style: TextStyle(color: Colors.yellow)),
+                Text('قم بإدخال حسابك من فضلك',
+                    style: TextStyle(color: Colors.yellow)),
                 SizedBox(width: 8),
                 Expanded(child: Divider(color: Colors.yellow)),
               ],
